@@ -2,6 +2,7 @@
 
 CXX_FLAGS += -std=c++11 -O3 -Wall
 PAR_FLAG = -fopenmp
+BUILD_DIR = build/x86
 
 ifneq (,$(findstring icpc,$(CXX)))
 	PAR_FLAG = -openmp
@@ -16,14 +17,23 @@ ifneq ($(SERIAL), 1)
 	CXX_FLAGS += $(PAR_FLAG)
 endif
 
+ifdef RISCV
+	CXX = riscv64-unknown-linux-gnu-g++
+	CXX_FLAGS += -static
+	BUILD_DIR = build/riscv
+endif
+
 KERNELS = bc bfs cc cc_afforest pr sssp tc
-SUITE = $(KERNELS) converter
+SUITE = $(addprefix $(BUILD_DIR)/,$(KERNELS) converter)
 
 .PHONY: all
 all: $(SUITE)
 
-% : src/%.cc src/*.h
+$(SUITE): $(BUILD_DIR)/% : src/%.cc src/*.h | $(BUILD_DIR)
 	$(CXX) $(CXX_FLAGS) $< -o $@
+
+$(BUILD_DIR):
+	mkdir -p $@
 
 # Testing
 include test/test.mk
