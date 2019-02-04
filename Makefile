@@ -23,7 +23,7 @@ ifdef RISCV
 	BUILD_DIR = build/riscv
 endif
 
-KERNELS = bc bfs cc cc_afforest pr sssp tc
+KERNELS = bc bfs cc cc_sv pr sssp tc
 SUITE = $(addprefix $(BUILD_DIR)/,$(KERNELS) converter)
 
 .PHONY: all
