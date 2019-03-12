@@ -17,6 +17,7 @@
 #include "util.h"
 #include "writer.h"
 
+#include "riscv_custom.h"
 
 /*
 GAP Benchmark Suite
@@ -105,7 +106,9 @@ void BenchmarkKernel(const CLApp &cli, const GraphT_ &g,
   Timer trial_timer;
   for (int iter=0; iter < cli.num_trials(); iter++) {
     trial_timer.Start();
+    riscv_roi_begin(); // start perf counters
     auto result = kernel(g);
+    riscv_roi_end(); // end perf counters
     trial_timer.Stop();
     PrintTime("Trial Time", trial_timer.Seconds());
     total_seconds += trial_timer.Seconds();

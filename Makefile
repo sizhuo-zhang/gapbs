@@ -19,7 +19,7 @@ endif
 
 ifdef RISCV
 	CXX = riscv64-unknown-linux-gnu-g++
-	CXX_FLAGS += -static
+	CXX_FLAGS += -static -I$(RISCY_HOME)/riscv_custom
 	BUILD_DIR = build/riscv
 endif
 
