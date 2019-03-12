@@ -1,6 +1,6 @@
 # See LICENSE.txt for license details.
 
-CXX_FLAGS += -std=c++11 -O3 -Wall
+CXX_FLAGS += -std=c++11 -O3 -Wall -I$(RISCY_HOME)/riscv_custom
 PAR_FLAG = -fopenmp
 BUILD_DIR = build/x86
 
@@ -19,7 +19,7 @@ endif
 
 ifdef RISCV
 	CXX = riscv64-unknown-linux-gnu-g++
-	CXX_FLAGS += -static -I$(RISCY_HOME)/riscv_custom
+	CXX_FLAGS += -static
 	BUILD_DIR = build/riscv
 endif
 
