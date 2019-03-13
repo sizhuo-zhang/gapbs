@@ -24,7 +24,7 @@ run_dict = {
         'sssp': 1,
     },
     'ref': {
-        'tc'  : 3,
+        'tc'  : 10, # 3 is too small
         'bfs' : 64,
         'pr'  : 16,
         'cc'  : 16,
