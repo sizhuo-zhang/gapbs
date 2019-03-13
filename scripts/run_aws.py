@@ -54,12 +54,15 @@ if len(ip_addrs) < len(benchmarks):
     raise Exception('Not enough IPs')
 
 # run the benchmarks
-proc_shell_cmd = ("'cd test; ls; cat run.sh; " +
-                  'echo ===Start===; ' +
-                  './run.sh ' + str(args.thread) + '; ' +
-                  'echo ===End===; ' +
-                  'ls; ./show.sh; ' +
-                  "cd; ./terminate'")
+def proc_shell_cmd(bench):
+    run_sh = bench + '-' + args.input_size + ".sh"
+    return ("'cd test; ls; " +
+            "cat " + run_sh + "; " +
+            "echo ===Start===; " +
+            "./" + run_sh + " " + str(args.thread) + "; " +
+            "echo ===End===; ls; " +
+            "cd; ./terminate'")
+
 for i, bench_graph_list in enumerate(benchmarks):
     # get IP
     ip = ip_addrs[i]
@@ -67,8 +70,7 @@ for i, bench_graph_list in enumerate(benchmarks):
     aws_cmd = 'cd ' + args.riscy_dir + '; source setup.sh; '
     for bench_graph in bench_graph_list:
         bench, graph = bench_graph.split('-')
-        bbl_path = os.path.join(args.bbl_dir,
-                                'bbl_gapbs_{}_{}'.format(bench, graph))
+        bbl_path = os.path.join(args.bbl_dir, 'bbl_gapbs_{}'.format(graph))
         aws_cmd += ('mkdir -p ' + os.path.join(args.out_dir, bench) + '; ' +
                     'cd ' + os.path.join(args.out_dir, bench) + '; ' +
                     'sudo fpga-load-local-image -S 0 -I ' + args.agfi + '; ' +
@@ -76,7 +78,7 @@ for i, bench_graph_list in enumerate(benchmarks):
                     ' --core-num ' + str(args.core) +
                     ' --mem-size ' + str(args.mem_size) +
                     ' --ignore-user-stucks 100000' +
-                    ' --shell-cmd ' + proc_shell_cmd + ' ' + str(args.delay) +
+                    ' --shell-cmd ' + proc_shell_cmd(bench) + ' ' + str(args.delay) +
                     ' --perf-file ' + os.path.join(bench + '.perf') +
                     ' --rom ' + args.rom +
                     ' --elf ' + bbl_path +
