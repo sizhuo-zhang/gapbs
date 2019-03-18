@@ -37,10 +37,9 @@ parser.add_argument('--delay', required = False,
 args = parser.parse_args()
 
 benchmarks = [
-    ['tc-roadU.sg'],
+    ['tc-roadU.sg', 'cc-road.sg'],
     ['bfs-road.sg'],
     ['pr-road.sg'],
-    ['cc-road.sg'],
     ['bc-road.sg'],
     ['sssp-road.wsg'],
 ]
