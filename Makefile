@@ -2,7 +2,7 @@
 
 CXX_FLAGS += -std=c++11 -O3 -Wall -I$(RISCY_HOME)/riscv_custom
 PAR_FLAG = -fopenmp
-BUILD_DIR = build/x86
+BUILD_DIR := build/x86
 
 ifneq (,$(findstring icpc,$(CXX)))
 	PAR_FLAG = -openmp
@@ -20,7 +20,12 @@ endif
 ifdef RISCV
 	CXX = riscv64-unknown-linux-gnu-g++
 	CXX_FLAGS += -static
-	BUILD_DIR = build/riscv
+	BUILD_DIR := build/riscv
+endif
+
+ifdef USE_RELAXED_ATOMICS
+	BUILD_DIR := $(BUILD_DIR)-relax
+	CXX_FLAGS += -DUSE_RELAXED_ATOMICS
 endif
 
 KERNELS = bc bfs cc cc_sv pr sssp tc

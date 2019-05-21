@@ -21,6 +21,35 @@ Wrappers for compiler intrinsics for atomic memory operations (AMOs)
 
     // gcc/clang/icc instrinsics
 
+    #if defined USE_RELAXED_ATOMICS
+    template<typename T, typename U>
+    T fetch_and_add(T &x, U inc) {
+      return __atomic_fetch_add(&x, inc, __ATOMIC_RELAXED);
+    }
+
+    template<typename T>
+    bool compare_and_swap(T &x, const T &old_val, const T &new_val) {
+      T expected = old_val;
+      return __atomic_compare_exchange_n(&x, &expected, new_val, false,
+                                         __ATOMIC_RELAXED, __ATOMIC_RELAXED);
+    }
+
+    template<>
+    bool compare_and_swap(float &x, const float &old_val, const float &new_val) {
+      return compare_and_swap<uint32_t>(reinterpret_cast<uint32_t&>(x),
+                                        reinterpret_cast<const uint32_t&>(old_val),
+                                        reinterpret_cast<const uint32_t&>(new_val));
+    }
+
+    template<>
+    bool compare_and_swap(double &x, const double &old_val, const double &new_val) {
+      return compare_and_swap<uint64_t>(reinterpret_cast<uint64_t&>(x),
+                                        reinterpret_cast<const uint64_t&>(old_val),
+                                        reinterpret_cast<const uint64_t&>(new_val));
+    }
+
+    #else
+
     template<typename T, typename U>
     T fetch_and_add(T &x, U inc) {
       return __sync_fetch_and_add(&x, inc);
@@ -44,6 +73,7 @@ Wrappers for compiler intrinsics for atomic memory operations (AMOs)
                                           reinterpret_cast<const uint64_t&>(old_val),
                                           reinterpret_cast<const uint64_t&>(new_val));
     }
+    #endif
 
   #elif __SUNPRO_CC
 
