@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--outdir', dest = 'out_dir', required = True)
 parser.add_argument('--jobs', dest = 'jobs', required = False, default = 1)
 parser.add_argument('--depld', dest = 'dep_ld_fence', action = 'store_true')
+parser.add_argument('--bindir', dest = 'bin_dir', required = False, default = '../build/riscv')
 args = parser.parse_args()
 
 # riscy dirs
@@ -19,7 +20,7 @@ bbl_path = os.path.join(os.environ['RISCY_TOOLS'], 'build-pk', 'bbl')
 
 # dirs for benchmarks
 input_dir = '../benchmark/graphs'
-bin_dir = '../build/riscv'
+bin_dir = args.bin_dir
 
 # dir to build linux
 out_dir = os.path.abspath(args.out_dir)
