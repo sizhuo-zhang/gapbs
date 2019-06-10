@@ -8,7 +8,7 @@ The following steps cross-compile the GAP benchmark suite to RISC-V, and build B
 
         $ make RISCV=1
 
-- Dowload the input graphs.
+- Dowload the input graphs. This step requires about 275 GB of disk space and 64 GB of RAM.
 
         $ ln -s build/x86/convert convert
         $ make bench-graphs
