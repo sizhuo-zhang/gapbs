@@ -1,3 +1,29 @@
+The following steps cross-compile the GAP benchmark suite to RISC-V, and build BBLs (Linux images) for the RiscyOO processor (`https://github.com/csail-csg/riscy-OOO`).
+
+- Compile x86 version. The binaries will be in `build/x86`
+
+        $ make
+
+- Compile the RISC-V version. The binaries will be in `build/riscv`
+
+        $ make RISCV=1
+
+- Dowload the input graphs.
+
+        $ ln -s build/x86/convert convert
+        $ make bench-graphs
+
+- Generate BBLs (Linux images).
+This step requires that we have sourced `setup.sh` of repo `https://github.com/csail-csg/riscy-OOO`.
+Currently we only build the BBLs for the USA-road graph, because other graphs are too large to fit in the FPGA DRAM.
+
+        $ cd scripts
+        $ ./gen_linux_image.py --outdir [output BBL directory] --jobs 8
+
+Below is the original README.
+
+----
+
 GAP Benchmark Suite [![Build Status](https://travis-ci.org/sbeamer/gapbs.svg)](https://travis-ci.org/sbeamer/gapbs)
 ===================
 
